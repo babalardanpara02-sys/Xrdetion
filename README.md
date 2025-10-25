@@ -1,1 +1,170 @@
-# Xrdetion
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Car Parking - Efsane Hesap Oluştur (Şaka)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
+    body {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      background: radial-gradient(circle at bottom, #0a0a0a 0%, #000 100%);
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      animation: moveBG 20s linear infinite;
+      opacity: 0.3;
+    }
+    @keyframes moveBG {
+      from {background-position: 0 0;}
+      to {background-position: 1000px 1000px;}
+    }
+    .container {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
+      width: 350px;
+      text-align: center;
+      animation: float 4s ease-in-out infinite alternate;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+    h1 {
+      color: #ff2d2d;
+      text-shadow: 0 0 20px #ff0000, 0 0 40px #ff3333;
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      margin-top: 12px;
+      text-align: left;
+      color: #ddd;
+      font-size: 14px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 14px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 12px 25px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(90deg, #ff0000, #ff4444);
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      text-shadow: 0 0 10px #fff;
+      box-shadow: 0 0 20px #ff0000;
+      transition: all 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 40px #ff3333;
+    }
+    .result {
+      display: none;
+      color: #00ff95;
+      font-size: 15px;
+      margin-top: 15px;
+      text-shadow: 0 0 10px #00ff95;
+      animation: glow 2s infinite alternate;
+    }
+    @keyframes glow {
+      from {opacity: 0.4;}
+      to {opacity: 1;}
+    }
+    small {
+      display: block;
+      color: #aaa;
+      margin-top: 10px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+  <div class="container">
+    <h1>Car Parking</h1>
+    <form id="fakeForm">
+      <label>Oyun ID:</label>
+      <input type="text" required>
+      <label>Gmail:</label>
+      <input type="email" required>
+      <label>Şifre:</label>
+      <input type="password" required>
+      <label>Coin Miktarı:</label>
+      <input type="number" placeholder="999999">
+      <label>Para (TL):</label>
+      <input type="number" placeholder="999999">
+      <button type="submit">Oluştur 🚗</button>
+      <div class="result" id="result">✅ İşleminiz 1 saat sonra kabul edilecektir 😎</div>
+    </form>
+    <small>*Bu site sadece şaka amaçlıdır. Hiçbir veri kaydedilmez.*</small>
+  </div>
+
+  <audio id="vroom" src="https://cdn.pixabay.com/download/audio/2023/03/15/audio_1b43f5b5b1.mp3?filename=car-engine-139066.mp3"></audio>
+
+  <script>
+    // Hareketli neon şehir efekti
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const cars = [];
+    for (let i = 0; i < 40; i++) {
+      cars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        speed: 0.5 + Math.random() * 1.5,
+        size: 2 + Math.random() * 3
+      });
+    }
+    function draw() {
+      ctx.fillStyle = 'rgba(0,0,0,0.2)';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      cars.forEach(car=>{
+        ctx.beginPath();
+        ctx.fillStyle = `hsl(${Math.random()*360},100%,60%)`;
+        ctx.arc(car.x,car.y,car.size,0,Math.PI*2);
+        ctx.fill();
+        car.x += car.speed;
+        if (car.x > canvas.width) car.x = 0;
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // Form işlemi
+    document.getElementById('fakeForm').addEventListener('submit', e => {
+      e.preventDefault();
+      document.getElementById('result').style.display = 'block';
+      document.getElementById('vroom').play();
+    });
+  </script>
+</body>
+</html>
